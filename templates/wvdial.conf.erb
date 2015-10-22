@@ -1,0 +1,14 @@
+[Dialer Defaults]
+Modem = /dev/ttyACM1
+Init1 = ATZ
+Init2 = ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0
+Init3 = AT+CFUN=1
+Init4 = AT+CGDCONT=1,"IP","INTERNETSTATIC", "<%= ip -%>"
+Stupid Mode = 1
+New PPPD = yes
+ISDN = 0
+Username = "<%= username -%>"
+Password = "<%= password -%>"
+Phone = *99#
+Baud = 460800
+Auto DNS = off
