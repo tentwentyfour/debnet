@@ -2,7 +2,31 @@
 #
 # Resource to define wvdial() configuration
 #
+# == Examples
+#
+# debnet::support::wvdial { 'myconf':
+#        device => '/etc/ttyACM1',
+#        baud => '460800',
+#        username => 'blank',
+#        password => 'blank',
+#        init => [
+#                'ATZ',
+#                'ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0',
+#                'AT+CFUN=1',
+#                'AT+CGDCONT=1,"IP","INTERNETSTATIC", "192.168.1.24"'
+#        ]
+#}
+#
 # == Parameters
+#
+# [*device*] - string
+#  Specify which device to use for this config.
+#  Each channel will require a different device, e.g. voice on ACM0, data on ACM1, etc
+#
+# [*baud*] - string
+#
+# [*username*] - string
+# [*password*] - string
 #
 # [*init*] - array
 #  will produce:
@@ -10,6 +34,9 @@
 #    Init2 = ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0
 #    Init3 = AT+CFUN=1
 #    Init4 = AT+CGDCONT=1,"IP","INTERNETSTATIC", "1.2.3.4"
+#
+# [*autodns*] - (on|off)
+#  Whether to add nameserver information to /etc/resolv.conf
 #
 # === Authors
 #
@@ -40,9 +67,7 @@ define debnet::support::wvdial(
   $autodns = 'off',
 ) {
 
-  # Should we test if file exists?
   validate_string($device)
-
   validate_string($baud)
   validate_array($init)
   validate_re($autodns, '^on$|^off$')
