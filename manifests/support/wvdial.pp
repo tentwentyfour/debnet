@@ -4,16 +4,20 @@
 #
 # == Parameters
 #
-# [*param*] - type
-#   description
+# [*init*] - array
+#  will produce:
+#    Init1 = ATZ
+#    Init2 = ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0
+#    Init3 = AT+CFUN=1
+#    Init4 = AT+CGDCONT=1,"IP","INTERNETSTATIC", "1.2.3.4"
 #
 # === Authors
 #
-# Tibor Repasi
+# David Raison
 #
 # === Copyright
 #
-# Copyright 2015 Tibor Repasi
+# Copyright 2015 David Raison
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,10 +31,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-class debnet::support::wvdial {
+define debnet::support::wvdial(
+  $device,
+  $baud,
+  $init = [],
+  $username = undef,
+  $password = undef,
+  $autodns = 'off'
+) {
 
+  # Should we test if file exists?
+  validate_string($device)
+
+  validate_string($baud)
+  validate_array($init)
+  validate_re($autodns, '^on$|^off$')
+
+  if $username {
+    validate_string($username)
+  } else {
+    $username = 'blank'
+  }
+
+  if $password {
+    validate_string($password)
+  } else {
+    $username = 'blank'
+  }
+
+  file { '/etc/wvdial.conf':
+    ensure  => file,
+    content => template('debnet/wvdial.conf.erb'),
+  }
 }
-
-# or (?)
-
-# define debnet::support::wvdial()  {}
