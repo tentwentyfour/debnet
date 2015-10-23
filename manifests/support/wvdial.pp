@@ -37,7 +37,7 @@ define debnet::support::wvdial(
   $init = [],
   $username = undef,
   $password = undef,
-  $autodns = 'off'
+  $autodns = 'off',
 ) {
 
   # Should we test if file exists?
@@ -49,14 +49,10 @@ define debnet::support::wvdial(
 
   if $username {
     validate_string($username)
-  } else {
-    $username = 'blank'
   }
 
   if $password {
     validate_string($password)
-  } else {
-    $username = 'blank'
   }
 
   file { '/etc/wvdial.conf':
